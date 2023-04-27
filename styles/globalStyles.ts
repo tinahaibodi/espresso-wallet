@@ -4,12 +4,14 @@ import { HelveticaMedium, HankenGrotesk } from "@/public/assets/fonts/fonts";
 import { devices } from "@/utils/devices";
 import {
   COLOR_BLACK,
+  COLOR_GRAY_LIGHT,
   COLOR_GREEN,
   COLOR_PINK,
+  COLOR_WHITE,
   COLOR_WHITE_LIGHT,
 } from "@/utils/colorPalette";
 
-export const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle<{ darkTheme: boolean }>`
     body {
       margin:0;
       padding:0;
@@ -17,7 +19,8 @@ export const GlobalStyle = createGlobalStyle`
       outline: 0;
       overflow-x: hidden;
       background-size: auto;
-      background-color: ${COLOR_BLACK};
+      background-color: ${({ darkTheme }) =>
+        darkTheme ? COLOR_BLACK : COLOR_WHITE};
       font-family: ${HelveticaMedium.style.fontFamily};
 
       &:before {
@@ -72,7 +75,13 @@ export const GlobalStyle = createGlobalStyle`
 
     h1, h2, h3, h4, h5, p {
       margin: 0;
-      color: ${COLOR_WHITE_LIGHT};
+      color: ${({ darkTheme }) =>
+        darkTheme ? COLOR_WHITE_LIGHT : COLOR_BLACK};
+    }
+
+    h2 {
+      font-size: 28px;
+      color: ${({ darkTheme }) => (darkTheme ? COLOR_GRAY_LIGHT : COLOR_BLACK)};
     }
 
     button {

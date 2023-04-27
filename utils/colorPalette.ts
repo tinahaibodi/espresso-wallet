@@ -9,3 +9,5 @@ export const COLOR_YELLOW = "#F6E674";
 export const COLOR_GREEN_LIGHT = "#84D3BE";
 export const COLOR_PINK_LIGHT = "#D569CB";
 export const COLOR_PURPLE = "#224BCB";
+export const COLOR_BLUE_LIGHT = "#94A3B8";
+export const COLOR_BLACK_LIGHT = "#151718";
