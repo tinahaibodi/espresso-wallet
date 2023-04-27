@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { MoonIcon, SunIcon } from "@/common/Icons";
 import {
   Container,
@@ -7,21 +5,19 @@ import {
   InnerContainer,
 } from "@/common/Layout/ThemeToggle/styles";
 
-export const ThemeToggle = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-
-  const toggleState = () => {
-    setIsEnabled((prevState) => !prevState);
-  };
-
-  return (
-    <Container onClick={toggleState}>
-      <InnerContainer isEnabled={isEnabled}>
-        <IconsContainer>
-          <SunIcon />
-          <MoonIcon />
-        </IconsContainer>
-      </InnerContainer>
-    </Container>
-  );
-};
+export const ThemeToggle = ({
+  theme,
+  onClick,
+}: {
+  theme: string | undefined;
+  onClick: () => void;
+}) => (
+  <Container onClick={onClick}>
+    <InnerContainer darkMode={theme === "dark"}>
+      <IconsContainer>
+        <SunIcon />
+        <MoonIcon />
+      </IconsContainer>
+    </InnerContainer>
+  </Container>
+);

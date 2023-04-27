@@ -15,23 +15,21 @@ export const IconsContainer = styled.div`
   margin: 0 5px;
 
   svg {
-    fill: ${COLOR_WHITE};
     height: 12px;
     width: 12px;
     z-index: 0;
   }
 `;
 
-export const InnerContainer = styled.div<{ isEnabled: boolean }>`
+export const InnerContainer = styled.div<{ darkMode: boolean }>`
   height: 30px;
   width: 54px;
-  background: ${COLOR_BLACK};
+  background: ${({ darkMode }) => (darkMode ? COLOR_BLACK : COLOR_WHITE)};
   border-radius: 40px;
   position: relative;
   padding: 5px;
-  transition: background 0.5s ease;
   cursor: pointer;
-  border: 1px solid ${COLOR_WHITE};
+  border: 1px solid ${({ darkMode }) => (darkMode ? COLOR_WHITE : COLOR_BLACK)};
 
   &:before {
     content: "";
@@ -39,11 +37,19 @@ export const InnerContainer = styled.div<{ isEnabled: boolean }>`
     height: 18px;
     width: 18px;
     border-radius: 30px;
-    background: ${COLOR_WHITE};
+    background: ${({ darkMode }) => (darkMode ? COLOR_WHITE : COLOR_BLACK)};
     position: absolute;
     z-index: 2;
-    transform: ${({ isEnabled }) =>
-      isEnabled ? "translateX(24px)" : "translate(0)"};
-    transition: transform 0.5s ease, background 0.5s ease;
+    transform: ${({ darkMode }) =>
+      darkMode ? "translateX(24px)" : "translate(0)"};
+    transition: transform 0.5s ease;
+  }
+
+  ${IconsContainer} {
+    svg {
+      path {
+        fill: ${({ darkMode }) => (darkMode ? COLOR_WHITE : COLOR_BLACK)};
+      }
+    }
   }
 `;

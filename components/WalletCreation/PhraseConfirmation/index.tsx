@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
+import { useCallback, useEffect, useRef } from "react";
 
 import { Button } from "@/common/Button";
 import { Heading } from "@/common/Heading";
 import { SectionContainer } from "@/common/Container";
+import { CopyIcon, DownloadIcon } from "@/common/Icons";
 import {
   InnerContainer,
   PhraseContainer,
@@ -16,15 +18,15 @@ export const PhraseConfirmation = ({
   state,
   handleBack,
   handleNext,
+  setCopiedPhrase,
 }: {
   state: Record<string, unknown>;
   handleBack: () => void;
   handleNext: () => void;
+  setCopiedPhrase: (phrase: string[]) => void;
 }) => {
+  const { resolvedTheme } = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [copiedPhrase, setCopiedPhrase] = useState<string[]>(
-    Array.from({ length: 12 }, () => "_______")
-  );
 
   const handlePaste = () => {
     navigator.clipboard.readText().then((text) => {
@@ -35,7 +37,7 @@ export const PhraseConfirmation = ({
     });
   };
 
-  const handleUpload = () => {
+  const handleUpload = useCallback(() => {
     if (inputRef.current) {
       inputRef.current.click();
     }
@@ -52,11 +54,20 @@ export const PhraseConfirmation = ({
 
       reader.readAsText(file);
     }
+  }, [setCopiedPhrase]);
+
+  const phrasesMatch = () => {
+    const generatedPhrase = state.phrase as string[];
+    const copiedPhrase = state.copiedPhrase as string[];
+
+    return generatedPhrase.every(
+      (phrase, index) => phrase === copiedPhrase[index]
+    );
   };
 
   useEffect(() => {
     inputRef.current?.addEventListener("change", handleUpload);
-  }, []);
+  }, [handleUpload]);
 
   return (
     <SectionContainer>
@@ -65,25 +76,27 @@ export const PhraseConfirmation = ({
           title="Confirm your Recover Phrase "
           description="This is to verify you have the recovery phrase in a safe place"
         />
-        <PhraseOuterContainer>
+        <PhraseOuterContainer darkTheme={resolvedTheme === "dark"}>
           <PhraseContainer>
-            {copiedPhrase.map((phrase: string, index: number) => (
-              <PhraseWrapper key={index}>
-                <span>{index + 1}</span>
-                <p>{phrase}</p>
-              </PhraseWrapper>
-            ))}
+            {(state.copiedPhrase as string[]).map(
+              (phrase: string, index: number) => (
+                <PhraseWrapper key={index}>
+                  <span>{index + 1}</span>
+                  <p>{phrase}</p>
+                </PhraseWrapper>
+              )
+            )}
           </PhraseContainer>
           <ButtonsContainer>
             <Button
               text="Paste"
-              icon="copy"
+              icon={<CopyIcon />}
               variant="secondary"
               onClick={handlePaste}
             />
             <Button
               text="Upload"
-              icon="download"
+              icon={<DownloadIcon />}
               variant="primary"
               onClick={handleUpload}
             />
@@ -92,7 +105,12 @@ export const PhraseConfirmation = ({
         </PhraseOuterContainer>
         <NavigationButtons>
           <Button text="Back" variant="primary" onClick={handleBack} />
-          <Button text="Next" variant="secondary" />
+          <Button
+            text="Next"
+            variant="secondary"
+            disabled={!phrasesMatch()}
+            onClick={handleNext}
+          />
         </NavigationButtons>
       </InnerContainer>
     </SectionContainer>

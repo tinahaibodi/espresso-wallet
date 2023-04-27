@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 import { Button } from "@/common/Button";
 import { Heading } from "@/common/Heading";
+import { CopyIcon, DownloadIcon } from "@/common/Icons";
 import { SectionContainer } from "@/common/Container";
 import {
   InnerContainer,
@@ -19,6 +21,8 @@ export const PhraseGeneration = ({
   state: Record<string, unknown>;
   handleNext: () => void;
 }) => {
+  const { resolvedTheme } = useTheme();
+
   const handleCopy = () => {
     const phrase = (state.phrase as string[]).join(" ");
     navigator.clipboard.writeText(phrase);
@@ -41,7 +45,7 @@ export const PhraseGeneration = ({
           title="Write down your Recover Phrase"
           description="You will need it on the next step"
         />
-        <PhraseOuterContainer>
+        <PhraseOuterContainer darkTheme={resolvedTheme === "dark"}>
           <PhraseContainer>
             {(state.phrase as string[]).map((phrase: string, index: number) => (
               <PhraseWrapper key={index}>
@@ -53,13 +57,13 @@ export const PhraseGeneration = ({
           <ButtonsContainer>
             <Button
               text="Copy"
-              icon="copy"
+              icon={<CopyIcon />}
               variant="secondary"
               onClick={handleCopy}
             />
             <Button
               text="Download"
-              icon="download"
+              icon={<DownloadIcon />}
               variant="primary"
               onClick={handleDownload}
             />
