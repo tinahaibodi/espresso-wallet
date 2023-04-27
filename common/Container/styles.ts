@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 import { devices } from "@/utils/devices";
+import { COLOR_WHITE } from "@/utils/colorPalette";
 
 const CONTAINER_MAX_WIDTH = "47.25rem";
 const LAYOUT_MAX_WIDTH = "64.125rem";
@@ -8,6 +9,7 @@ const LAYOUT_MAX_WIDTH = "64.125rem";
 export const Section = styled.section<{
   padding?: string;
   layout?: boolean;
+  darkTheme: boolean;
 }>`
   display: grid;
   grid-template-columns: ${({ layout }) =>

@@ -2,23 +2,23 @@ import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/common/Button";
 import { COLOR_PURPLE } from "@/utils/colorPalette";
+import { ArrowDownIcon, ArrowUpIcon } from "@/common/Icons";
 import { Container, OptionList } from "@/common/Dropdown/styles";
 
 export const Dropdown = ({
   options,
   onChange,
+  darkTheme,
 }: {
-  options: {
-    label: string;
-    value: string;
-  }[];
-  onChange: (value: { label: string; value: string }) => void;
+  options: string[];
+  onChange: (value: string) => void;
+  darkTheme: boolean;
 }) => {
   const [isOpened, updateIsOpened] = useState(false);
   const [activeItem, updateActiveItem] = useState(options[0]);
   const optionsListRef = useRef(null);
 
-  const handleOptionClick = (item: { label: string; value: string }) => {
+  const handleOptionClick = (item: string) => {
     onChange(item);
     updateActiveItem(item);
     updateIsOpened(false);
@@ -49,26 +49,30 @@ export const Dropdown = ({
   }, [isOpened]);
 
   return (
-    <Container>
+    <Container darkTheme={darkTheme}>
       <Button
         reduceGap
-        variant="primary"
-        icon={isOpened ? "arrowUp" : "arrowDown"}
+        variant={darkTheme ? "primary" : "secondary"}
+        icon={isOpened ? <ArrowUpIcon /> : <ArrowDownIcon />}
         ellipsis={{ color: COLOR_PURPLE, size: "6px" }}
-        text={activeItem.label}
+        text={activeItem}
         onClick={() => updateIsOpened(!isOpened)}
       />
       <OptionList ref={optionsListRef} isOpened={isOpened}>
         {options.map((option) => (
           <Button
             reduceGap
-            text={option.label}
-            key={option.value}
+            text={option}
+            key={option}
             ellipsis={{ color: COLOR_PURPLE, size: "6px" }}
             onClick={() => handleOptionClick(option)}
-            aria-selected={activeItem.value === option.value}
+            aria-selected={activeItem === option}
             variant={
-              activeItem.value === option.value ? "secondary" : "primary"
+              activeItem === option && darkTheme
+                ? "secondary"
+                : activeItem === option || darkTheme
+                ? "primary"
+                : "secondary"
             }
           />
         ))}

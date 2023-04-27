@@ -4,8 +4,10 @@ import { COLOR_BLACK, COLOR_WHITE_LIGHT } from "@/utils/colorPalette";
 
 export const Container = styled.button<{
   variant: string;
+  darkTheme: boolean;
   reduceGap?: boolean;
   reducePadding?: boolean;
+  disabled?: boolean;
 }>`
   font-size: 14px;
   padding: ${({ reducePadding }) =>
@@ -20,8 +22,22 @@ export const Container = styled.button<{
   background: ${({ variant }) =>
     variant === "primary" ? COLOR_BLACK : COLOR_WHITE_LIGHT};
   border-radius: 50px;
-  border: ${({ reduceGap }) =>
-    reduceGap ? "none" : `1px solid ${COLOR_WHITE_LIGHT}`};
+  border: ${({ reduceGap, darkTheme }) =>
+    reduceGap
+      ? "none"
+      : darkTheme
+      ? `1px solid ${COLOR_WHITE_LIGHT}`
+      : `1px solid ${COLOR_BLACK}`};
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  svg > path {
+    fill: ${({ variant }) =>
+      variant === "primary" ? COLOR_WHITE_LIGHT : COLOR_BLACK};
+  }
 `;
 
 export const Ellipsis = styled.div<{

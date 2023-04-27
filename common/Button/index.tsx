@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useTheme } from "next-themes";
 
 import { Container, Ellipsis } from "@/common/Button/styles";
 
@@ -6,9 +6,10 @@ export interface ButtonProps {
   text: string;
   onClick?: () => void;
   variant: "primary" | "secondary";
-  icon?: "copy" | "download" | "arrowDown" | "arrowUp";
+  icon?: JSX.Element;
   reduceGap?: boolean;
   reducePadding?: boolean;
+  disabled?: boolean;
   ellipsis?: {
     color: string;
     size: string;
@@ -23,30 +24,23 @@ export const Button = ({
   ellipsis,
   reduceGap,
   reducePadding,
-}: ButtonProps) => (
-  <Container
-    onClick={onClick}
-    variant={variant}
-    reduceGap={reduceGap}
-    reducePadding={reducePadding}
-  >
-    {ellipsis && <Ellipsis color={ellipsis.color} size={ellipsis.size} />}
-    {icon && !ellipsis && (
-      <Image
-        src={`/assets/svg/${icon}.svg`}
-        alt={icon}
-        width={15}
-        height={15}
-      />
-    )}
-    {text}
-    {icon && ellipsis && (
-      <Image
-        src={`/assets/svg/${icon}.svg`}
-        alt={icon}
-        width={15}
-        height={15}
-      />
-    )}
-  </Container>
-);
+  disabled,
+}: ButtonProps) => {
+  const { resolvedTheme } = useTheme();
+
+  return (
+    <Container
+      onClick={onClick}
+      variant={variant}
+      reduceGap={reduceGap}
+      reducePadding={reducePadding}
+      disabled={disabled}
+      darkTheme={resolvedTheme === "dark"}
+    >
+      {ellipsis && <Ellipsis color={ellipsis.color} size={ellipsis.size} />}
+      {icon && !ellipsis && icon}
+      {text}
+      {icon && ellipsis && icon}
+    </Container>
+  );
+};
